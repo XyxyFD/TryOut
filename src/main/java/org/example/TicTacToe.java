@@ -16,20 +16,31 @@ public class TicTacToe {
     }
 
     public void start() {
-        board.clear();
-        while (!board.isFull() && !hasWinner()) {
-            board.print();
-            System.out.println("Current Player: " + currentPlayer.getMarker());
-            int[] move = getPlayerMove();
-            board.place(move[0], move[1], currentPlayer.getMarker());
-            switchCurrentPlayer();
-        }
-        board.print();
-        if (hasWinner()) {
-            switchCurrentPlayer();
-            System.out.println("Player " + currentPlayer.getMarker() + " wins!");
-        } else {
-            System.out.println("It's a draw!");
+        while (true) {
+            board.clear();
+            while (!board.isFull() && !hasWinner()) {
+                board.print();
+                System.out.println("Current Player: " + currentPlayer.getMarker());
+                int[] move = getPlayerMove();
+                board.place(move[0], move[1], currentPlayer.getMarker());
+                if (hasWinner()) {
+                    board.print();
+                    System.out.println("Player " + currentPlayer.getMarker() + " wins!");
+                    break;
+                }
+                switchCurrentPlayer();
+            }
+            if (board.isFull() && !hasWinner()) {
+                board.print();
+                System.out.println("It's a draw!");
+            }
+
+            System.out.print("Do you want to play again? (yes/no): ");
+            Scanner scanner = new Scanner(System.in);
+            String answer = scanner.next();
+            if (!answer.equalsIgnoreCase("yes")) {
+                break;
+            }
         }
     }
 
@@ -47,7 +58,9 @@ public class TicTacToe {
             if (row >= 0 && row < 3 && col >= 0 && col < 3 && board.isCellEmpty(row, col)) {
                 validInput = true;
             } else {
-                System.out.println("Invalid input. Please enter a row and column between 0 and 2 that are not already occupied.");
+                System.out.println(
+                        "Invalid input. Enter a row and column (0-2) that are not already occupied."
+                );
             }
         }
 
